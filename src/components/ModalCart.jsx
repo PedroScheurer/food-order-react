@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import Item from "./Item";
 
-export default function ModalCart({ cart, addMealToCart, removeMealFromCart }) {
+export default function ModalCart({ cart, addMealToCart, removeMealFromCart, ref, showModal }) {
     const [formatedCart, setFormatedCart] = useState([])
+    const [emptyCart, setEmptyCart] = useState(false)
 
     useEffect(() => {
-        if (!cart) return
+        if (!cart || cart.length === 0) {
+            return setEmptyCart(true)
+        }
+
         const groupedObj = cart.reduce((acc, item) => {
             const key = item.id;
             if (!acc[key]) acc[key] = [];
@@ -23,26 +27,29 @@ export default function ModalCart({ cart, addMealToCart, removeMealFromCart }) {
             }
         }
         ));
-
+        setEmptyCart(false)
     }, [cart])
 
     return (
-        <div className="modal cart">
+        <dialog ref={ref} className="modal cart">
             <h2 className="gray">Carrinho</h2>
-            <ul>
+            {!emptyCart && <ul>
                 {formatedCart.map(item => (
                     <Item key={item.id} cart={cart} item={item} addMealToCart={addMealToCart} removeMealFromCart={removeMealFromCart} />
                 ))}
-            </ul>
-            <div className="cart-total">
+            </ul>}
+            <div className="cart-total money">
                 R${formatedCart.reduce((acc, item) => {
                     return acc + item.precoTotal
                 }, 0)}
             </div>
-            <div className="modal-actions">
+            <form method="dialog" className="modal-actions">
                 <button className="text-button">Cancelar</button>
-                <button className="button">Finalizar</button>
-            </div>
-        </div>
+                {!emptyCart && <button onClick={()=>showModal(2)} className="button">Próximo</button>}
+            </form>
+            {emptyCart && <div className="error">
+                <p>O carrinho está vazio</p>
+            </div>}
+        </dialog>
     )
 }

@@ -1,4 +1,4 @@
-export default function Header({cartLength}) {
+export default function Header({cartLength, showModal}) {
     return (
         <>
             <header id="main-header">
@@ -6,7 +6,7 @@ export default function Header({cartLength}) {
                     <img src="./logo.jpg" alt="logo" />
                     <h1>ReactFood</h1>
                 </div>
-                <button className="text-button">Carrinho({cartLength})</button>
+                <button className="text-button" onClick={()=>showModal(1)}>Carrinho({cartLength})</button>
             </header>
 
         </>
