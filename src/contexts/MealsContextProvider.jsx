@@ -16,7 +16,7 @@ export default function MealsContextProvider({ children }) {
     }
 
     const postOrders = async (data) => {
-        const res = await axios.post(`${BASE_URL}/orders`, data)
+        const res = await axios.post(`${BASE_URL}/orders`, {order:data}, { headers: { "Content-Type": "application/json" }})
         if (res.status === 400) return { error: "Fail to post orders" }
         return res.data;
     }

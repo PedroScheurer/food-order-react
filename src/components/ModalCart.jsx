@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import Item from "./Item";
 
-export default function Modal({ cart, addMealToCart }) {
+export default function ModalCart({ cart, addMealToCart, removeMealFromCart }) {
     const [formatedCart, setFormatedCart] = useState([])
 
     useEffect(() => {
@@ -27,29 +28,20 @@ export default function Modal({ cart, addMealToCart }) {
 
     return (
         <div className="modal cart">
-            <h2 className="gray">Your Cart</h2>
+            <h2 className="gray">Carrinho</h2>
             <ul>
                 {formatedCart.map(item => (
-                    <li key={item.id}
-                        className="cart-item gray"
-                    >
-                        {item.nome} - {item.quantidade}x - R${item.preco}
-                        <div className="cart-item-actions">
-                            <button >-</button>
-                            <p className="gray">{item.quantidade}</p>
-                            <button onClick={()=>{
-                                const selectedMeal = cart.filter((meal) => meal.id === item.id)
-                                console.log(selectedMeal[0])
-                                addMealToCart(selectedMeal[0])
-                                }}>+</button>
-                        </div>
-                    </li>
+                    <Item key={item.id} cart={cart} item={item} addMealToCart={addMealToCart} removeMealFromCart={removeMealFromCart} />
                 ))}
             </ul>
             <div className="cart-total">
                 R${formatedCart.reduce((acc, item) => {
                     return acc + item.precoTotal
                 }, 0)}
+            </div>
+            <div className="modal-actions">
+                <button className="text-button">Cancelar</button>
+                <button className="button">Finalizar</button>
             </div>
         </div>
     )

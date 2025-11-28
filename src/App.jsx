@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Meals from "./components/Meals";
-import Modal from "./components/Modal";
+import ModalCart from "./components/ModalCart";
+import ModalCheckout from "./components/ModalCheckout";
 
 function App() {
   const [cart, setCart] = useState([]);
@@ -12,17 +13,29 @@ function App() {
     })
   }
 
+  const removeMealFromCart = (id) => {
+    setCart(prevCart => {
+      const index = prevCart.findIndex(meal => meal.id === id);
 
+      if(index === -1) return prevCart;
+      
+      const newCart = [...prevCart];
+      newCart.splice(index,1);
+      return newCart;
 
-  return (
-    <>
-      <Modal cart={cart}/>
-      <Header cartLength={cart.length} addMealToCart={addMealToCart}/>
-      <main>
-      <Meals addMealToCart={addMealToCart}/>
-      </main>
-    </>
-  );
+    })
+  }
+
+return (
+  <>
+    <ModalCart cart={cart} addMealToCart={addMealToCart} removeMealFromCart={removeMealFromCart} />
+    <ModalCheckout cart={cart} />
+    <Header cartLength={cart.length} />
+    <main>
+      <Meals addMealToCart={addMealToCart} />
+    </main>
+  </>
+);
 }
 
 export default App;
